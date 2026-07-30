@@ -4,8 +4,8 @@ The unprotected `slipshell-v1.4.0` tag predates the repository licensing and
 tag-protection correction. It is retained as history and is not the source URL
 used by SlipShell.
 
-Use `releases/slipshell-source-v1.4.0-r2.md` and the protected
-`slipshell-source-v1.4.0-r2` tag for this binary set.
+Use `releases/slipshell-source-v1.4.0-r3.md` and the protected
+`slipshell-source-v1.4.0-r3` tag for this binary set.
 
 The historical artifact hashes were:
 

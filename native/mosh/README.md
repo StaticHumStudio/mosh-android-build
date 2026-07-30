@@ -79,8 +79,9 @@ Mosh is GPLv3 or later, with the OpenSSL linking exception stated in its source
 headers. SlipShell distributes `mosh-client` as a separate executable and does
 not link its code into the app. This repository provides network access to the
 executable's Corresponding Source under GPLv3 section 6(d), and the app links
-the protected release tag from its open source licences screen. Recipients also
-receive Mosh's exact GPLv3 text and applicable client notice inside the app.
+the protected release tag from its About section. The open source licences
+screen also displays a selectable copy of the same URL. Recipients receive
+Mosh's exact GPLv3 text and applicable client notice inside the app.
 This section records that distribution path without making a broader legal
 conclusion about SlipShell.
 

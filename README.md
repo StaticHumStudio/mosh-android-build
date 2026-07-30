@@ -56,7 +56,7 @@ used for reproduction.
 
 ## Release mapping
 
-* [`slipshell-source-v1.4.0-r2`](releases/slipshell-source-v1.4.0-r2.md)
+* [`slipshell-source-v1.4.0-r3`](releases/slipshell-source-v1.4.0-r3.md)
 
 The Git tag with the same name freezes the source package for that shipped
 binary set.

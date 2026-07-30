@@ -1,10 +1,9 @@
 # SlipShell Mosh source mapping
 
-This frozen historical mapping was superseded by
-`slipshell-source-v1.4.0-r3`, which corrects the description of the two in-app
-source access surfaces without changing the native source set or executables.
+This mapping covers the Mosh executable set prepared for the SlipShell v1.4
+milestone.
 
-* Corresponding source tag: `slipshell-source-v1.4.0-r2`
+* Corresponding source tag: `slipshell-source-v1.4.0-r3`
 * SlipShell native artifact commit: `7afada4726d0b01241e63beede894e49cb5291cf`
 * Mosh: `1.4.0`
 * OpenSSL: `3.5.7`
@@ -13,8 +12,9 @@ source access surfaces without changing the native source set or executables.
 * Android NDK: `27.2.12479018`
 * Android API: `26`
 
-SlipShell exposes this tagged source URL and bundles the exact Mosh GPLv3 text
-and applicable Mosh client notice in its open source licences screen.
+SlipShell links this protected source tag from its About section. Its open
+source licences screen displays a selectable copy of the same URL and bundles
+the exact Mosh GPLv3 text and applicable Mosh client notice.
 
 ## Shipped executable provenance
 
