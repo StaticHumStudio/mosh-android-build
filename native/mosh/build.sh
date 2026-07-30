@@ -13,8 +13,8 @@
 # app may exec from under W^X, so the client ships as libmosh_client_exec.so
 # and is exec'd, not loaded.
 #
-# This script plus versions.env plus the four tarballs it names ARE the
-# Corresponding Source for the GPLv3 binary we ship. See README.md.
+# This script, versions.env, and the four tarballs it names are part of the
+# Corresponding Source package for the mosh-client binary. See README.md.
 #
 # ---------------------------------------------------------------------------
 # Four things here look like paranoia and are not. Each produced a convincing

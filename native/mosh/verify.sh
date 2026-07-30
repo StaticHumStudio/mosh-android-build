@@ -192,8 +192,8 @@ verify_artifact() {
 # Every other check here reads the ELF shape, which says nothing about
 # provenance. Without this, bumping OPENSSL_VERSION for a CVE and forgetting to
 # rebuild leaves a stale binary that passes every assertion, while README's
-# claim that these files are the Corresponding Source for the shipped GPLv3
-# binary quietly becomes false. build.sh writes the manifest, and this compares
+# mapping between the source package and shipped binary quietly becomes false.
+# build.sh writes the manifest, and this compares
 # BOTH directions: the recorded pins against versions.env, and the recorded
 # hashes against the files on disk.
 check_provenance() {

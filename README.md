@@ -1,8 +1,10 @@
 # Mosh Android build source
 
-This public repository is the Corresponding Source offer for the
-`mosh-client` executables shipped with SlipShell. SlipShell itself is a
-separate private work and is not included here.
+This public repository provides network access to the Corresponding Source for
+the `mosh-client` executables shipped with SlipShell, following GPLv3 section
+6(d). SlipShell recipients also receive Mosh's GPL text and applicable notice
+inside the app. SlipShell itself is a separate private work and is not included
+here.
 
 The source tree contains:
 
@@ -15,6 +17,18 @@ The source tree contains:
 
 No Mosh session keys, SSH credentials, signing material, or SlipShell source
 belong in this repository.
+
+## Licensing
+
+The top-level [`LICENSE`](LICENSE) applies only to the build scripts,
+verification scripts, release mappings, and documentation authored by Static
+Hum Studio in this repository.
+
+The mirrored third-party source archives keep their own license terms. Mosh's
+exact GPLv3 text is in `mosh-1.4.0/COPYING` inside the mirrored Mosh tarball.
+The Mosh client source headers state GPLv3 or later and include the applicable
+OpenSSL linking exception. Nothing in the top-level MIT license replaces or
+alters those upstream terms.
 
 ## Reproduce the Android executables
 
@@ -42,7 +56,7 @@ used for reproduction.
 
 ## Release mapping
 
-* [`slipshell-v1.4.0`](releases/slipshell-v1.4.0.md)
+* [`slipshell-source-v1.4.0-r2`](releases/slipshell-source-v1.4.0-r2.md)
 
 The Git tag with the same name freezes the source package for that shipped
 binary set.

@@ -75,11 +75,14 @@ because there is nothing on disk to fall back to.
 
 ## GPL obligations
 
-mosh is GPLv3+ (with an OpenSSL linking exception). Exec'ing it as a separate
-program creates no combined work, so the obligation attaches to the mosh binary
-alone and not to SlipShell. It is discharged by a written offer of Corresponding
-Source, published at `StaticHumStudio/mosh-android-build` and linked from the
-app's open source licences screen.
+Mosh is GPLv3 or later, with the OpenSSL linking exception stated in its source
+headers. SlipShell distributes `mosh-client` as a separate executable and does
+not link its code into the app. This repository provides network access to the
+executable's Corresponding Source under GPLv3 section 6(d), and the app links
+the protected release tag from its open source licences screen. Recipients also
+receive Mosh's exact GPLv3 text and applicable client notice inside the app.
+This section records that distribution path without making a broader legal
+conclusion about SlipShell.
 
 **Corresponding Source is everything needed to regenerate the conveyed
 executable**, which is more than mosh's own source. The shipped binary
@@ -91,8 +94,9 @@ carry:
 - the NDK version, recorded
 - a mapping from each SlipShell release to the exact set it was built from
 
-Pointing at upstream download URLs does not discharge the obligation. Those
-locations are not ours to keep available and exact versions do disappear.
+Upstream download URLs are not the network location SlipShell gives recipients.
+The public build repository mirrors the exact archives so the linked source set
+does not depend on an upstream release URL remaining available.
 
 ## Version pins
 
