@@ -9,6 +9,7 @@ here.
 The source tree contains:
 
 * exact mirrored release tarballs for Mosh, OpenSSL, protobuf, and ncurses
+* the exact downstream readiness patch applied to Mosh
 * SHA256 checksums and version pins in `native/mosh/versions.env`
 * the exact `build.sh` and `verify.sh` used for the shipped executables
 * the pinned Android NDK version and Android API level
@@ -33,7 +34,8 @@ alters those upstream terms.
 ## Reproduce the Android executables
 
 Install Android NDK `27.2.12479018`, Android SDK CMake `3.22.1`, a host `g++`,
-`curl`, `make`, `perl`, `pkg-config`, and standard archive tools. Then run:
+`curl`, `make`, `patch`, `perl`, `pkg-config`, and standard archive tools. Then
+run:
 
 ```bash
 export ANDROID_HOME=/path/to/android-sdk
@@ -56,7 +58,7 @@ used for reproduction.
 
 ## Release mapping
 
-* [`slipshell-source-v1.4.0-r3`](releases/slipshell-source-v1.4.0-r3.md)
+* [`slipshell-source-v1.4.0-r4`](releases/slipshell-source-v1.4.0-r4.md)
 
 The Git tag with the same name freezes the source package for that shipped
 binary set.

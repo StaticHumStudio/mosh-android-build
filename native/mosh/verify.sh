@@ -32,11 +32,20 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck disable=SC1091
 source "$SCRIPT_DIR/versions.env"
 
-# Digest of versions.env with comments, blank lines and ordering removed, so a
-# comment edit or a reordering does not force a rebuild but any actual setting
-# change does. Shared by build.sh and verify.sh, which must agree exactly.
+# Digest of every tracked input that changes the executable. Comments, blank
+# lines and versions.env ordering are normalized, while the downstream patch
+# is bound byte for byte. Shared by build.sh and verify.sh.
+config_digest_for_patch() {
+  local patch_file=$1
+  [ -f "$patch_file" ] || return 1
+  {
+    grep -vE '^[[:space:]]*(#|$)' "$SCRIPT_DIR/versions.env" | sed 's/[[:space:]]*$//'
+    sha256sum "$patch_file" | sed 's/[[:space:]].*/  readiness-patch/'
+  } | sort | sha256sum | cut -d' ' -f1
+}
+
 normalized_config_digest() {
-  grep -vE '^[[:space:]]*(#|$)' "$SCRIPT_DIR/versions.env" | sed 's/[[:space:]]*$//' | sort | sha256sum | cut -d' ' -f1
+  config_digest_for_patch "$SCRIPT_DIR/patches/0001-slipshell-ready-signal.patch"
 }
 
 ANDROID_HOME=${ANDROID_HOME:-$HOME/.local/opt/android-sdk}
@@ -210,24 +219,26 @@ check_provenance() {
   # named version stays put. ANDROID_API and the source checksums behave the
   # same way.
   local want_config recorded_config
-  want_config=$(normalized_config_digest)
+  want_config=$(normalized_config_digest) || {
+    fail "could not hash versions.env and the downstream readiness patch"
+    return 1
+  }
   recorded_config=$(sed -n 's/^# config: //p' "$manifest")
   [ -n "$recorded_config" ] || { fail "artifacts.sha256 records no config digest. Re-run native/mosh/build.sh"; return 1; }
   if [ "$recorded_config" != "$want_config" ]; then
     local want_pins recorded_pins
     want_pins="mosh=$MOSH_VERSION openssl=$OPENSSL_VERSION protobuf=$PROTOBUF_VERSION ncurses=$NCURSES_VERSION ndk=$NDK_VERSION"
     recorded_pins=$(sed -n 's/^# pins: //p' "$manifest")
-    fail "versions.env has changed since these binaries were built.
+    fail "native build inputs changed since these binaries were built.
         versions.env now: $want_pins
         artifacts built from: ${recorded_pins:-unknown}
         config digest ${want_config:0:16} vs recorded ${recorded_config:0:16}
         If the version lines above look identical, something else in
-        versions.env changed that still affects the binary, for example
-        NCURSES_FALLBACKS, ANDROID_API, ABIS or a source checksum.
+        versions.env or the downstream readiness patch changed.
         The committed binaries are stale. Re-run native/mosh/build.sh."
     return 1
   fi
-  pass "config digest matches versions.env (${want_config:0:16})"
+  pass "config digest matches versions.env and readiness patch (${want_config:0:16})"
 
   local hash rel
   local seen=""
@@ -389,6 +400,20 @@ selftest() {
     actual_fails=-1
   fi
   QUIET=0
+
+  local original_config mutated_config mutated_patch
+  mutated_patch="$tmp/readiness.patch"
+  cp "$SCRIPT_DIR/patches/0001-slipshell-ready-signal.patch" "$mutated_patch"
+  original_config=$(normalized_config_digest)
+  printf '\n# selftest mutation\n' >> "$mutated_patch"
+  mutated_config=$(config_digest_for_patch "$mutated_patch")
+  expected_fails=$((expected_fails + 1))
+  if [ "$original_config" != "$mutated_config" ]; then
+    actual_fails=$((actual_fails + 1))
+    echo "  caught      mutated downstream readiness patch"
+  else
+    echo "  NOT CAUGHT  mutated downstream readiness patch  <-- provenance ignores patch content"
+  fi
 
   echo
   if [ "$actual_fails" -eq "$expected_fails" ]; then

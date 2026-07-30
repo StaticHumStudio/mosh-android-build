@@ -3,6 +3,13 @@
 SlipShell runs Mosh by exec'ing the C reference client as a child process on a
 PTY, not by linking it. This directory is how that binary gets built.
 
+The downstream patch in `patches/` emits a private PTY control record after the
+first authenticated UDP packet arrives. SlipShell consumes that record before
+selecting Mosh, which keeps the temporary SSH shell noninteractive and provides
+a bounded fallback when UDP is unavailable. Its exact content is included in
+the artifact provenance digest, so changing the patch without rebuilding fails
+verification.
+
 ```bash
 native/mosh/build.sh                  # all ABIs
 native/mosh/build.sh arm64-v8a        # one
@@ -13,9 +20,9 @@ native/mosh/verify.sh --selftest      # assert the assertions can fail
 Output lands in `androidApp/src/androidMain/jniLibs/<abi>/libmosh_client_exec.so`
 and is committed, so an ordinary clone builds a working APK without an NDK.
 
-Requires the NDK and cmake pinned in `versions.env`, plus a host `g++` (protoc
-has to run on the build machine). No sudo, no autotools: mosh's release tarball
-ships a pre-generated `configure`.
+Requires the NDK and cmake pinned in `versions.env`, plus a host `g++`, `patch`,
+and the standard build tools (protoc has to run on the build machine). No sudo,
+no autotools: mosh's release tarball ships a pre-generated `configure`.
 
 ## Why the binary is named like a library
 

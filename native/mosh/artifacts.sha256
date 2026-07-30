@@ -2,7 +2,7 @@
 # Ties the committed binaries to the pins that produced them, so a
 # version bump without a rebuild fails instead of shipping quietly.
 # pins: mosh=1.4.0 openssl=3.5.7 protobuf=3.21.12 ncurses=6.6 ndk=27.2.12479018
-# config: a34b28ff7c985d132704ed5bba28a89b437d3d46dfdc6655260f19944955f6ff
-d136d853110cbd487056bbf2aef01fc9b720cc19d848e8c628a941f5a8a0be5c  arm64-v8a/libmosh_client_exec.so
-528134a15ca2ec44008bfe8b44459875e57d6b3f506dea1c723d22f10eafc121  armeabi-v7a/libmosh_client_exec.so
-ba98e158b495a4fb20fee11d3e82904ed166112d9ef72bca67f51b8d4d2668ed  x86_64/libmosh_client_exec.so
+# config: 68b42fd15b2d40b72c622bc401b60cc0471ff62b3d1f684f7fc75b0382b12dc8
+93f9dfe784ae09527632bb859f3eae236d07406b935d0f8f3477d4b37a964951  arm64-v8a/libmosh_client_exec.so
+4d9836d87d413fbb9f7a597f19397a1eb65b21be2b80a47a8f903a3719d9aa7d  armeabi-v7a/libmosh_client_exec.so
+a06ce3d4a158ea8a5acbce43d10c79ca477433856998eb9b35e2701ae22a38f7  x86_64/libmosh_client_exec.so

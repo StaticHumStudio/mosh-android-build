@@ -44,11 +44,20 @@ REPO_ROOT=$(cd "$SCRIPT_DIR/../.." && pwd)
 # shellcheck disable=SC1091
 source "$SCRIPT_DIR/versions.env"
 
-# Digest of versions.env with comments, blank lines and ordering removed, so a
-# comment edit or a reordering does not force a rebuild but any actual setting
-# change does. Shared by build.sh and verify.sh, which must agree exactly.
+# Digest of every tracked input that changes the executable. Comments, blank
+# lines and versions.env ordering are normalized, while the downstream patch
+# is bound byte for byte. Shared by build.sh and verify.sh.
+config_digest_for_patch() {
+  local patch_file=$1
+  [ -f "$patch_file" ] || return 1
+  {
+    grep -vE '^[[:space:]]*(#|$)' "$SCRIPT_DIR/versions.env" | sed 's/[[:space:]]*$//'
+    sha256sum "$patch_file" | sed 's/[[:space:]].*/  readiness-patch/'
+  } | sort | sha256sum | cut -d' ' -f1
+}
+
 normalized_config_digest() {
-  grep -vE '^[[:space:]]*(#|$)' "$SCRIPT_DIR/versions.env" | sed 's/[[:space:]]*$//' | sort | sha256sum | cut -d' ' -f1
+  config_digest_for_patch "$SCRIPT_DIR/patches/0001-slipshell-ready-signal.patch"
 }
 
 ANDROID_HOME=${ANDROID_HOME:-$HOME/.local/opt/android-sdk}
@@ -270,6 +279,10 @@ build_abi() {
   echo "  mosh $MOSH_VERSION"
   mkdir -p "$w/mosh"
   tar xzf "$CACHE/mosh-$MOSH_VERSION.tar.gz" -C "$w/mosh" --strip-components=1 || die "$abi: extract mosh"
+  (
+    cd "$w/mosh" &&
+    patch --batch --forward -p1 < "$SCRIPT_DIR/patches/0001-slipshell-ready-signal.patch"
+  ) || die "$abi: apply SlipShell readiness patch"
   sed -i "s|^prefix=.*|prefix=$prefix|" "$prefix"/lib/pkgconfig/*.pc 2>/dev/null
   (
     cd "$w/mosh" &&
@@ -312,6 +325,8 @@ done
 if [ "$TARGET_ABIS" = "$ABIS" ]; then
   step "Manifest"
   MANIFEST=$SCRIPT_DIR/artifacts.sha256
+  CONFIG_DIGEST=$(normalized_config_digest) ||
+    die "could not hash versions.env and the downstream readiness patch"
   {
     echo "# Written by native/mosh/build.sh. Checked by native/mosh/verify.sh."
     echo "# Ties the committed binaries to the pins that produced them, so a"
@@ -323,7 +338,7 @@ if [ "$TARGET_ABIS" = "$ABIS" ]; then
     # binary, but every named version stays put, so an enumerated pin line still
     # matches and stale artifacts verify clean while versions.env claims the new
     # TERM works. ANDROID_API and the source checksums have the same property.
-    echo "# config: $(normalized_config_digest)"
+    echo "# config: $CONFIG_DIGEST"
     for abi in $ABIS; do
       ( cd "$JNILIBS" && sha256sum "$abi/libmosh_client_exec.so" )
     done

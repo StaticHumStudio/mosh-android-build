@@ -1,0 +1,16 @@
+diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
+index 5c06ea6..8025e5c 100644
+--- a/src/frontend/stmclient.cc
++++ b/src/frontend/stmclient.cc
+@@ -292,0 +293,11 @@
++
++  /*
++   * SlipShell keeps the SSH terminal noninteractive until mosh-client has
++   * received an authenticated UDP packet. The parent consumes this private
++   * PTY control record and never forwards it to the terminal emulator.
++   */
++  if ( getenv( "SLIPSHELL_MOSH_READY" ) != NULL ) {
++    static const char ready_signal[] = "\033]777;SlipShellMoshReady\007";
++    swrite( STDOUT_FILENO, ready_signal, sizeof( ready_signal ) - 1 );
++    unsetenv( "SLIPSHELL_MOSH_READY" );
++  }
